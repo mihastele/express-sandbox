@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const adminRoutes = require('./routes/admin');
+const modelRoutes = require('./routes/model');
 const pathLink = require('./util/path');
 const path = require('path');
 
@@ -27,15 +28,13 @@ app.set('views', 'views'); // optional, it is already default
 app.use(bodyParser.urlencoded());
 
 app.use(express.static(path.join(pathLink, 'public')));
+app.use('/admin', adminRoutes);
+app.use('/model', modelRoutes);
 
 app.use('/favicon.ico', (req, res, next) => {
   console.log('NEJ');
   res.send();
 });
-
-
-app.use(adminRoutes);
-
 
 app.get('/izi', (req, res, next) => {
   // console.log(req);
