@@ -1,50 +1,24 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const adminRoutes = require('./routes/admin');
-const modelRoutes = require('./routes/model');
-const pathLink = require('./util/path');
 const path = require('path');
 
+const express = require('express');
+const bodyParser = require('body-parser');
 
-/*
-installing and setup pug
-
-npm install --save pug
-*/
-
-
-/*
-installing and setup ejs and handlebars
-
-npm install --save ejs express-handlebars
-
-
-*/
+const errorController = require('./controllers/error');
 
 const app = express();
-app.set('view engine', 'pug');
-app.set('views', 'views'); // optional, it is already default
 
-app.use(bodyParser.urlencoded());
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
-app.use(express.static(path.join(pathLink, 'public')));
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/admin', adminRoutes);
-app.use('/model', modelRoutes);
+app.use(shopRoutes);
 
-app.use('/favicon.ico', (req, res, next) => {
-  console.log('NEJ');
-  res.send();
-});
-
-app.get('/izi', (req, res, next) => {
-  // console.log(req);
-  res.status(200).render('pages/izi', {req});
-});
-
-
-app.use((req, res, next) => {
-  res.status(404).send('404 Page not found');
-});
-
+app.use(errorController.get404);
 
 app.listen(3000);

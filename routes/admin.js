@@ -1,18 +1,18 @@
-/* eslint-disable new-cap */
+const path = require('path');
+
 const express = require('express');
-const controller = require('../controllers/controller');
+
+const adminController = require('../controllers/admin');
 
 const router = express.Router();
 
-router.get('/noforward', (req, res, next) => {
-  console.log('noforward');
-  res.send();
-});
+// /admin/add-product => GET
+router.get('/add-product', adminController.getAddProduct);
 
-router.post((req, res, next) => {
-  console.log('I\'m in middleware');
-  next();
-});
+// /admin/products => GET
+router.get('/products', adminController.getProducts);
 
-router.use('/miha', controller.mihacontroller);
+// /admin/add-product => POST
+router.post('/add-product', adminController.postAddProduct);
+
 module.exports = router;
